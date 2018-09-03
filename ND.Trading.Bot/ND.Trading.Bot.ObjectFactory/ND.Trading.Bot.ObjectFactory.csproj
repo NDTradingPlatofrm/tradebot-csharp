@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C7461781-F55B-425A-B526-1ECF734CED75}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ND.Trading.Bot.ObjectFactory</RootNamespace>
+    <AssemblyName>ND.Trading.Bot.ObjectFactory</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExchangeFactory.cs" />
+    <Compile Include="IFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StrategyFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ND.Trading.Bot.Strategies\ND.Trading.Bot.Strategies.csproj">
+      <Project>{8abb3d50-2017-4e78-99be-f9de7174d558}</Project>
+      <Name>ND.Trading.Bot.Strategies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ND.Trading.Platform.Etrade\ND.Trading.Platform.Exchange.Etrade.csproj">
+      <Project>{f930ce5e-5e5f-4486-adbe-9400648c0660}</Project>
+      <Name>ND.Trading.Platform.Exchange.Etrade</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ND.Trading.Platform.Models\ND.Trading.Platform.Models.csproj">
+      <Project>{e97c0e1f-15c3-492b-ac33-f62dd5e010b6}</Project>
+      <Name>ND.Trading.Platform.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ND.Trading.Platform.Oanda\ND.Trading.Platform.Exchange.Oanda.csproj">
+      <Project>{e67b5e33-20d0-471e-8c4d-262c9afcf801}</Project>
+      <Name>ND.Trading.Platform.Exchange.Oanda</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ND.Trading.Platform.TDM\ND.Trading.Platform.TDM.csproj">
+      <Project>{784a4b51-0c4c-4641-b9a4-29298c1b9270}</Project>
+      <Name>ND.Trading.Platform.TDM</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
