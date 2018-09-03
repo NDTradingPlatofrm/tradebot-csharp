@@ -34,7 +34,7 @@ namespace ND.Trading.Bot.Engine
                     newThread = new Thread(this.strategyList[i].TriggerStrategy);
                     newThread.Name = this.strategyList[i].GetStrategyId();
                     newThread.Start();
-                   // break; //TODO remove **********************
+                    break; //TODO remove **********************
                 }
             }
             catch (Exception ex)
