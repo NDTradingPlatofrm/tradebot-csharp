@@ -58,6 +58,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Config\config.json" />
+    <None Include="Config\credential.json" />
     <None Include="Config\etrade.json" />
     <None Include="Config\oanda.json" />
     <None Include="packages.config" />

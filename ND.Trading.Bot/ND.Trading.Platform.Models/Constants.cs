@@ -17,6 +17,7 @@ namespace ND.Trading.Platform.Models
             public static readonly string BASEPATH = "BasePath";
             public static readonly string CONFIGPATH = "ConfigPath";
             public static readonly string CONFIGFILE = "config.json";
+            public static readonly string CREDCONFIGFILE = "credential.json";
         }
         public static class Environment
         {

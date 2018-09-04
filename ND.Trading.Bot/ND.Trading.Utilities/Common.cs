@@ -1,5 +1,10 @@
-﻿using System;
+﻿using ND.Trading.Platform.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mail;
@@ -81,7 +86,7 @@ namespace ND.Trading.Utilities
             {
                 if (!String.IsNullOrEmpty(item.Value) &&
                     !item.Key.EndsWith("secret") && !item.Key.EndsWith("token"))
-                    {
+                {
                     sb.AppendFormat("oauth_{0}=\"{1}\", ",
                         item.Key,
                         UrlEncode(item.Value));
@@ -229,19 +234,33 @@ namespace ND.Trading.Utilities
         }
         public void SendMail(string message)
         {
+            string basePath = System.IO.Directory.GetCurrentDirectory().ToString();
+            string configPath = ConfigurationManager.AppSettings[Constants.Directories.CONFIGPATH].ToString();
+            string configFile = basePath + configPath + Constants.Directories.CREDCONFIGFILE;
+            string emailId = string.Empty;
+            string pass = string.Empty;
+
+            using (StreamReader file = File.OpenText(configFile))
+            using (JsonTextReader reader = new JsonTextReader(file))
+            {
+                JObject jsonObject = (JObject)JToken.ReadFrom(reader);
+                emailId = jsonObject["email"].Value<string>();
+                pass = jsonObject["password"].Value<string>();
+            }
+
             SmtpClient client = new SmtpClient("smtp-mail.outlook.com");
 
             client.Port = 587;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
             System.Net.NetworkCredential credentials =
-                new System.Net.NetworkCredential("dinu.john@outlook.com", "Ch!nju123");
+                new System.Net.NetworkCredential(emailId, pass);
             client.EnableSsl = true;
             client.Credentials = credentials;
 
             try
             {
-                var mail = new MailMessage("dinu.john@outlook.com", "dinu.john@outlook.com");
+                var mail = new MailMessage(emailId, emailId);
                 mail.Subject = "********* QUICK BUY TRIGGERED *******";
                 mail.Body = message;
                 client.Send(mail);
