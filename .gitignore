@@ -40,6 +40,12 @@ Generated\ Files/
 *.VisualState.xml
 TestResult.xml
 
+# SecretConfig
+config.json
+etrade.json
+oanda.json
+credential.json
+
 # Build Results of an ATL Project
 [Dd]ebugPS/
 [Rr]eleasePS/
