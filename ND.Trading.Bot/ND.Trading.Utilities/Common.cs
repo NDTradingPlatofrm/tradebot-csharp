@@ -248,7 +248,7 @@ namespace ND.Trading.Utilities
                 pass = jsonObject["password"].Value<string>();
             }
 
-            SmtpClient client = new SmtpClient("smtp-mail.outlook.com");
+            SmtpClient client = new SmtpClient("smtp-mail.outlook.com"); //outlook smtp.
 
             client.Port = 587;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;

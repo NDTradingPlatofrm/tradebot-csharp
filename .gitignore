@@ -44,6 +44,7 @@ TestResult.xml
 config.json
 etrade.json
 oanda.json
+credential.json
 
 # Build Results of an ATL Project
 [Dd]ebugPS/
