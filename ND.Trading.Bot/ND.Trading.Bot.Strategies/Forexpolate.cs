@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 
 
+
 namespace ND.Trading.Bot.Strategies
 {
     public class Forexpolate : Strategy
@@ -31,15 +32,15 @@ namespace ND.Trading.Bot.Strategies
 
         public Forexpolate(StrategyConfig config)
             : base(config)
-        { 
+        {
             QuickBuyLongFlag = false;
-            QuickBuyShortFlag = false; 
+            QuickBuyShortFlag = false;
         }
         public override void TriggerStrategy()
         {
             try
             {
-               LongAccountInfo = GetAccountDetails(GetAccountId("Long"));
+                LongAccountInfo = GetAccountDetails(GetAccountId("Long"));
                 ShortAccountInfo = GetAccountDetails(GetAccountId("Short"));
                 //this.GetPositionConfig("EUR_USD").TradeProcess = false;
                 //GlobalConfig.SerializeRootConfig(ConfigFile);
@@ -62,7 +63,7 @@ namespace ND.Trading.Bot.Strategies
 
                 } while (this.ExitLoop == 0);
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 Common obj = new Common();
                 obj.LogMessageToFile(ex.Message);
@@ -377,13 +378,13 @@ namespace ND.Trading.Bot.Strategies
                         if (this.CurrentAccount.Type == "Long")
                         {
                             if (QuickBuyLongAccountInfo == null)
-                                QuickBuyLongAccountInfo = GetAccountDetails(GetAccountId("Long"));
+                                QuickBuyLongAccountInfo = GetAccountDetails(GetAccountId("QuickBuyLong"));
                             newThread = new Thread(() => this.TriggerQuickBuy(this.FxStock.Symbol));
                         }
                         else if (this.CurrentAccount.Type == "Short")
                         {
                             if (QuickBuyShortAccountInfo == null)
-                                QuickBuyShortAccountInfo = GetAccountDetails(GetAccountId("Short"));
+                                QuickBuyShortAccountInfo = GetAccountDetails(GetAccountId("QuickBuyShort"));
                             newThread = new Thread(() => this.TriggerQuickBuy(this.FxStock.Symbol));
                         }
 
@@ -550,7 +551,10 @@ namespace ND.Trading.Bot.Strategies
             {
                 if (orderObject.Status == "FILLED")
                 {
-                    Console.WriteLine("Quick Buy " + this.CurrentAccount.Type + " -------- " + this.StockObject.Symbol + " at " + this.CurrentPrice.ToString());
+                    string msg = "Quick Buy " + this.CurrentAccount.Id + "[" + this.CurrentAccount.Type + "]" + " -------- " + this.StockObject.Symbol + " at " + this.CurrentPrice.ToString();
+                    //Console.WriteLine();
+                    Common obj = new Common();
+                    obj.SendMail(msg);
                 }
                 else if (orderObject.Status == "PENDING")
                 {

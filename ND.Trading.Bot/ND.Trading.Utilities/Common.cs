@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -224,6 +225,31 @@ namespace ND.Trading.Utilities
             finally
             {
                 sw.Close();
+            }
+        }
+        public void SendMail(string message)
+        {
+            SmtpClient client = new SmtpClient("smtp-mail.outlook.com");
+
+            client.Port = 587;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            System.Net.NetworkCredential credentials =
+                new System.Net.NetworkCredential("dinu.john@outlook.com", "Ch!nju123");
+            client.EnableSsl = true;
+            client.Credentials = credentials;
+
+            try
+            {
+                var mail = new MailMessage("dinu.john@outlook.com", "dinu.john@outlook.com");
+                mail.Subject = "********* QUICK BUY TRIGGERED *******";
+                mail.Body = message;
+                client.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw ex;
             }
         }
         #endregion
