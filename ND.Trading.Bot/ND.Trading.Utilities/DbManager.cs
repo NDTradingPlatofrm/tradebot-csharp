@@ -50,6 +50,11 @@ namespace ND.Trading.Utilities
             var collection = DB.GetCollection<T>(typeof(T).Name);
             return collection.Find<T>(query).ToList();
         }
+        public IEnumerable<T> GetLastEntityList<T>(FilterDefinition<T> query, SortDefinition<T> sortDef, int limit) where T : Entity
+        {
+            var collection = DB.GetCollection<T>(typeof(T).Name);
+            return collection.Find<T>(query).Sort(sortDef).Limit(limit).ToList();
+        }
 
         public T GetEntity<T>(FilterDefinition<T> query) where T : Entity
         {

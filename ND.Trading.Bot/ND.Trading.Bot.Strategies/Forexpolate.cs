@@ -40,6 +40,12 @@ namespace ND.Trading.Bot.Strategies
         {
             try
             {
+                DataAnalyzer dt = new DataAnalyzer("USD_CAD", GetAccountId("Long"), "short");
+                dt.IsGoodToBuy();
+
+
+
+
                 LongAccountInfo = GetAccountDetails(GetAccountId("Long"));
                 ShortAccountInfo = GetAccountDetails(GetAccountId("Short"));
                 //this.GetPositionConfig("EUR_USD").TradeProcess = false;
@@ -552,7 +558,6 @@ namespace ND.Trading.Bot.Strategies
                 if (orderObject.Status == "FILLED")
                 {
                     string msg = "Quick Buy " + this.CurrentAccount.Id + "[" + this.CurrentAccount.Type + "]" + " -------- " + this.StockObject.Symbol + " at " + this.CurrentPrice.ToString();
-                    //Console.WriteLine();
                     Common obj = new Common();
                     obj.SendMail(msg);
                 }

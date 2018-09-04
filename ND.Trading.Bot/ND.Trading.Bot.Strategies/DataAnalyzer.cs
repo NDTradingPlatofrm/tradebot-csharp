@@ -135,82 +135,81 @@ namespace ND.Trading.Bot.Core
             filter = Builders<ActiveTicker>.Filter.Where(sp => sp.Symbol == Symbol && sp.AccountId == AccountID);
             dbManager.DeleteEntity(filter);
         }
-        public class ActiveTicker : Entity
-        {
-            public string Symbol { get; set; }
-            public string AccountId { get; set; }
-            public ActiveTicker(string sym, string actId)
-            {
-                this.Symbol = sym;
-                this.AccountId = actId;
-            }
-        }
-        public class ExpBuyInterval : Entity
-        {
-            public string ReferanceId { get; set; }
-            public string AccountId { get; set; }
-            public int TradeId { get; set; }
-            public string Symbol { get; set; }
-            public decimal Price { get; set; }
-            public decimal Units { get; set; }
-            public DateTime PurchaseTime { get; set; }
 
-            public ExpBuyInterval(string rId, int id, string s, decimal pr, decimal u, DateTime pt, string actId)
+        public bool IsGoodToBuy()
+        {
+            bool rtnVal = false;
+            List<decimal> lastUnitFactorList = new List<decimal>(); //persist
+            string lastUnitFactorId = ""; //Get last unit factor id, keep in seperate class and persist object in strategy class
+            decimal lastUnitFactor = 0.0m;
+
+            FilterDefinition<ForexStock> filterExp = null;
+            filterExp = Builders<ForexStock>.Filter.Where(sp => sp.Symbol == Symbol && sp.AccountId == AccountID);
+            SortDefinition<ForexStock> sortDef = null;
+            sortDef = Builders<ForexStock>.Sort.Descending(sp => sp.ModifiedTime);
+            List<ForexStock> fxList = dbManager.GetLastEntityList(filterExp, sortDef, 11).ToList();
+            if (fxList != null)
             {
-                ReferanceId = rId;
-                AccountId = actId;
-                TradeId = id;
-                Symbol = s;
-                Price = pr;
-                Units = u;
-                PurchaseTime = pt;
+                //DateTime dt = fxList[0].ModifiedTime.ToLocalTime();
+                if (lastUnitFactorId == string.Empty)
+                {
+                    lastUnitFactor = fxList[0].Count - fxList[fxList.Count - 1].Count; //persist unit factor if need
+                    lastUnitFactorList.Add(lastUnitFactor);
+                }
+                else if (lastUnitFactorId != fxList[0].Id)
+                {
+
+                    lastUnitFactorId = fxList[0].Id;
+                    lastUnitFactor = fxList[0].Count - fxList[fxList.Count - 1].Count;
+                    decimal min = lastUnitFactorList.Min();
+                    decimal buyFactor = min - lastUnitFactor;
+                    if (lastUnitFactorList.Count == 10)
+                        lastUnitFactorList.RemoveAt(10);
+                    else
+                        lastUnitFactorList.Add(lastUnitFactor);
+                    if (buyFactor >= 4)
+                        rtnVal = true;
+                }
             }
+            return rtnVal;
+
+        }
+        public bool IsGoodToSell()
+        {
+            bool rtnVal = false;
+
+            return rtnVal;
+        }
+    }
+    public class ActiveTicker : Entity
+    {
+        public string Symbol { get; set; }
+        public string AccountId { get; set; }
+        public ActiveTicker(string sym, string actId)
+        {
+            this.Symbol = sym;
+            this.AccountId = actId;
+        }
+    }
+    public class ExpBuyInterval : Entity
+    {
+        public string ReferanceId { get; set; }
+        public string AccountId { get; set; }
+        public int TradeId { get; set; }
+        public string Symbol { get; set; }
+        public decimal Price { get; set; }
+        public decimal Units { get; set; }
+        public DateTime PurchaseTime { get; set; }
+
+        public ExpBuyInterval(string rId, int id, string s, decimal pr, decimal u, DateTime pt, string actId)
+        {
+            ReferanceId = rId;
+            AccountId = actId;
+            TradeId = id;
+            Symbol = s;
+            Price = pr;
+            Units = u;
+            PurchaseTime = pt;
         }
     }
 }
-
-
-/*
-                //for (int i = fxList.Count - 1; i >= 0; i--)
-                //{
-                //    item = (ForexStock)fxList[i];
-                //    if (i == (fxList.Count - 1))
-                //    {
-                //        expData = new ExpBuyInterval(refId, item.TradeId, item.Symbol, item.PriceBuy, item.PriceBuy, item.Count, item.PurchaseTime, item.PurchaseTime);
-                //        DBManager.InsertEntity<ExpBuyInterval>(expData);
-                //    }
-                //    else
-                //    {
-                //        expData = new ExpBuyInterval(refId, CurFxStock.TradeId, CurFxStock.Symbol, CurFxStock.PriceBuy, PreFxStock.PriceBuy, CurFxStock.Count, CurFxStock.PurchaseTime, PreFxStock.PurchaseTime);
-                //        DBManager.InsertEntity<ExpBuyInterval>(expData);
-                //    }
-                //}
-
- //public ForexStock CurFxStock { get; set; }
-        //public ForexStock PreFxStock { get; set; }
-        //public void SaveDataForAnalysisTemp<T>(T obj, string uniqueId = "")
-        //{
-        //    Type type = typeof(T);
-
-
-        //    //Create Dat analyze object here and supply values
-
-
-
-
-        //    if (uniqueId != string.Empty)
-        //    {
-        //        //Update
-        //        if (type.Name == "")
-        //        {
-        //            DBManager.InsertEntity<Order>((Order)Convert.ChangeType(obj, typeof(Order)));
-        //        }
-        //    }
-        //    else
-        //        DBManager.InsertEntity<Order>((Order)Convert.ChangeType(obj, typeof(Order)));
-        //}
-
-
-   
-
-*/
